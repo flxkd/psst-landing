@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Пссс… 🤫 Что о тебе думают в школе</title>
+<meta name="description" content="Анонимные вопросы про одноклассников в Telegram. Выбрали тебя — прилетает огонёк. Кто выбрал — тайна.">
+<meta property="og:title" content="Пссс… 🤫 Что о тебе думают в школе">
+<meta property="og:description" content="Анонимные вопросы про одноклассников. Кто тебя выбрал — тайна.">
+<style>
+  :root { --bg1:#1a0b2e; --bg2:#3b0a3a; --pink:#f472b6; --gold:#fbbf24; --text:#fff; --muted:rgba(255,255,255,.72); }
+  * { box-sizing: border-box; }
+  html, body { margin:0; min-height:100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+    color: var(--text); background: radial-gradient(120% 90% at 10% 0%, #6b2153 0%, var(--bg1) 55%) fixed, var(--bg1);
+    display:flex; justify-content:center; padding: 32px 16px 48px;
+  }
+  main { width:100%; max-width:440px; text-align:center; }
+  .logo { font-size:56px; line-height:1; margin: 8px 0 12px; }
+  h1 { font-size: 30px; line-height:1.15; margin: 0 0 12px; font-weight: 900; letter-spacing:-.5px; }
+  p.lead { color: var(--muted); font-size: 17px; line-height:1.45; margin: 0 0 22px; }
+  .card { background: rgba(255,255,255,.09); border-radius: 22px; padding: 18px 18px 16px; margin: 0 0 14px; text-align:left; }
+  .q { font-weight: 800; font-size: 18px; margin-bottom: 12px; }
+  .opts { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .opt { background: rgba(255,255,255,.12); border-radius: 14px; padding: 12px; font-weight: 700; text-align:center; }
+  .opt.on { background: var(--pink); }
+  .fire { background: var(--gold); color:#2a0f3a; border-radius: 16px; padding: 14px 16px; font-weight: 800; margin: 0 0 22px; text-align:left; }
+  .btns { display:flex; flex-direction:column; gap: 12px; margin: 0 0 16px; }
+  a.btn {
+    display:block; text-decoration:none; color:#2a0f3a; background: var(--gold);
+    font-weight: 900; font-size: 19px; padding: 17px 18px; border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(251,191,36,.25);
+  }
+  a.btn.alt { background: var(--pink); color:#fff; box-shadow: 0 10px 30px rgba(244,114,182,.25); }
+  a.btn.ghost { background: transparent; color: var(--muted); box-shadow:none; border: 2px solid rgba(255,255,255,.25);
+                font-size: 16px; padding: 13px 16px; }
+  .small { color: var(--muted); font-size: 13px; line-height:1.5; }
+  .small a { color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <div class="logo">🤫</div>
+  <h1 id="title">Что о тебе думают в школе?</h1>
+  <p class="lead">Анонимные вопросы про одноклассников в Telegram. Выбирают тебя — прилетает 🔥 огонёк. Кто выбрал — тайна.</p>
+
+  <div class="card">
+    <div class="q">💓 От кого у меня замирает сердце?</div>
+    <div class="opts"><div class="opt">Маша</div><div class="opt on">Тимур</div><div class="opt">Лиза</div><div class="opt">Даня</div></div>
+  </div>
+  <div class="fire">👧 Девушка из 9 класса выбрала тебя 🔥</div>
+
+  <div class="btns" id="btns"></div>
+  <p class="small">Бесплатно · для 7–11 классов · открывается в Telegram<br>
+    Кого выбрал ты — не узнает никто. Только добрые вопросы.</p>
+</main>
+<script>
+  // Пресеты кампаний: ?p=<ключ>. У каждой кнопки — своя метка (видна в /sources бота) и своя школа.
+  var BOT = "Psst_chat_bot";
+  var PRESETS = {
+    akadem: {
+      title: "Гимназия №5 и Лицей №130 — что о вас думают? 🤫",
+      label: "yd_akadem",
+      schools: [["novosibirsk-gym-5", "Я из Гимназии №5"], ["novosibirsk-lyceum-130", "Я из Лицея №130"]]
+    }
+  };
+  var q = new URLSearchParams(location.search);
+  var preset = PRESETS[q.get("p") || ""];
+  var box = document.getElementById("btns");
+  function add(href, text, cls) {
+    var a = document.createElement("a");
+    a.className = "btn" + (cls ? " " + cls : ""); a.href = href; a.textContent = text; box.appendChild(a);
+  }
+  if (preset) {
+    document.getElementById("title").textContent = preset.title;
+    preset.schools.forEach(function (s, i) {
+      add("https://t.me/" + BOT + "?start=s_" + preset.label + "-" + s[0], s[1] + " →", i % 2 ? "alt" : "");
+    });
+    add("https://t.me/" + BOT + "?start=" + preset.label, "Я из другой школы", "ghost");
+  } else {
+    var label = (q.get("l") || "site").replace(/[^A-Za-z0-9_]/g, "").slice(0, 32) || "site";
+    add("https://t.me/" + BOT + "?start=" + label, "Открыть в Telegram →", "");
+  }
+</script>
+</body>
+</html>
