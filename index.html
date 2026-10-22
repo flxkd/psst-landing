@@ -62,7 +62,7 @@
     akadem: {
       title: "Что о тебе думают в школе? 🤫",
       label: "yd_akadem",
-      schools: [["novosibirsk-gym-5", "Я из Гимназии №5"], ["novosibirsk-lyceum-130", "Я из Лицея №130"]]
+      schools: []  // в радиус попадает несколько школ — город и школу выбирают в боте сами
     }
   };
   var q = new URLSearchParams(location.search);
@@ -72,12 +72,15 @@
     var a = document.createElement("a");
     a.className = "btn" + (cls ? " " + cls : ""); a.href = href; a.textContent = text; box.appendChild(a);
   }
-  if (preset) {
+  if (preset && preset.schools.length) {
     document.getElementById("title").textContent = preset.title;
     preset.schools.forEach(function (s, i) {
       add("https://t.me/" + BOT + "?start=s_" + preset.label + "-" + s[0], s[1] + " →", i % 2 ? "alt" : "");
     });
     add("https://t.me/" + BOT + "?start=" + preset.label, "Я из другой школы", "ghost");
+  } else if (preset) {
+    document.getElementById("title").textContent = preset.title;
+    add("https://t.me/" + BOT + "?start=" + preset.label, "Открыть в Telegram →", "");
   } else {
     var label = (q.get("l") || "site").replace(/[^A-Za-z0-9_]/g, "").slice(0, 32) || "site";
     add("https://t.me/" + BOT + "?start=" + label, "Открыть в Telegram →", "");
